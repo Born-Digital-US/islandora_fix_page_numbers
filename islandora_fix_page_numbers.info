@@ -1,0 +1,4 @@
+name = Islandora Fix Page Numbers
+core = 7.x
+description = Provides a drush command to renumber pages in paged content.
+dependencies[] = islandora_paged_content
