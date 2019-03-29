@@ -56,11 +56,16 @@ function _islandora_fix_page_numbers($type) {
       foreach ($results['response']['objects'] as $result) {
         $issue = islandora_object_load($result['PID']);
         $pages = islandora_paged_content_get_pages($issue);
-        $batch = ifpn_paged_content_sequence_pages_batch($issue, array_keys($pages));
-        batch_set($batch);
-        $count++;
-        if($count > $limit) {
-          break 2;
+        // If the first page is "1", assume the rest of the pages are numbered correctly,
+        // and that we don't have to do anything for this issue.
+        $first_page = reset($pages);
+        if(empty($first_page['page']) || $first_page['page'] !== '1') {
+          $batch = ifpn_paged_content_sequence_pages_batch($issue, array_keys($pages));
+          batch_set($batch);
+          $count++;
+          if($count > $limit) {
+            break 2;
+          }
         }
       }
     }
